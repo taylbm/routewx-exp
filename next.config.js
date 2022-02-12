@@ -3,6 +3,7 @@ const withPWA = require('next-pwa')
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
 })
+require('dotenv').config()
 
 module.exports = withPWA(
   withMDX({
@@ -15,3 +16,8 @@ module.exports = withPWA(
     pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   })
 )
+module.exports = {
+  env: {
+    REACT_APP_MAPBOX_TOKEN: process.env.REACT_APP_MAPBOX_TOKEN,
+  },
+}
