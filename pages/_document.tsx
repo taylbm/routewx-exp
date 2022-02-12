@@ -69,6 +69,8 @@ class MyDocument extends Document {
         </Head>
 
         <body className='h-full'>
+          <div id='datetime-display' />
+          <div id='map' />
           <Main />
           <NextScript />
         </body>

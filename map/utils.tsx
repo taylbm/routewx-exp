@@ -10,7 +10,11 @@ export function parseFrameDate(frameName: string) {
     'yyyyMMdd-HHmm',
     new Date()
   )
-  return parsedDate
+  const zonedDate = subtractHours(
+    parsedDate,
+    new Date().getTimezoneOffset() / 60
+  )
+  return zonedDate
 }
 
 export function getFrameUrl(frameName: string) {

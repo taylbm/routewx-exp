@@ -72,8 +72,8 @@ export default function Home() {
       )
       const max = parseFrameDate(dateStrings[dateStrings.length - 1])
 
-      setMinDate(max)
-      setMaxDate(min)
+      setMinDate(min)
+      setMaxDate(max)
     }
     getAvailableFrames()
   }, [])
@@ -139,7 +139,7 @@ export default function Home() {
     setSelectedDate(new Date(ms))
   }
   const onSliderUpdate = ([ms]: readonly number[]) => {
-    setSelectedDate(new Date(ms))
+    setUpdatedDate(new Date(ms))
   }
   const dateTicks = scaleTime()
     .domain([minDate, maxDate])
@@ -148,7 +148,6 @@ export default function Home() {
 
   return (
     <div>
-      <div id='map' />
       <div>
         <Slider
           mode={1}
