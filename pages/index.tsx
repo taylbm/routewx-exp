@@ -50,7 +50,7 @@ export default function Home() {
 
   useEffect(() => {
     let map = new mapboxgl.Map({
-      accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+      accessToken: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
       container: 'map', // container ID
       style: 'mapbox://styles/mapbox/streets-v11', // style URL
       center: [-100, 40], // starting position [lng, lat]
