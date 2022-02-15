@@ -70,7 +70,7 @@ class MyDocument extends Document {
 
         <body className='h-full'>
           <div id='datetime-display' />
-          <div id='map' />
+          <div id='map' className='h-screen w-full' />
           <Main />
           <NextScript />
         </body>
