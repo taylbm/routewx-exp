@@ -1,8 +1,10 @@
+import { Map } from 'mapbox-gl'
+
 export function addRasterLayer(
-  map,
-  currentFrameUrl,
-  currentFrameDateStr,
-  opacity
+  map: Map,
+  currentFrameUrl: string,
+  currentFrameDateStr: string,
+  opacity: number
 ) {
   map.addSource(currentFrameDateStr, {
     type: 'raster',
@@ -23,7 +25,12 @@ export function addRasterLayer(
   })
 }
 
-export function showRasterLayer(map, duration, opacity, frameName) {
+export function showRasterLayer(
+  map: Map,
+  duration: number,
+  opacity: number,
+  frameName: string
+) {
   map.setPaintProperty(frameName, 'raster-opacity-transition', {
     duration: duration,
     delay: duration,
@@ -31,7 +38,7 @@ export function showRasterLayer(map, duration, opacity, frameName) {
   map.setPaintProperty(frameName, 'raster-opacity', opacity)
 }
 
-export function hideRasterLayer(map, duration, frameName) {
+export function hideRasterLayer(map: Map, duration: number, frameName: string) {
   map.setPaintProperty(frameName, 'raster-opacity-transition', {
     duration: duration,
     delay: duration,
