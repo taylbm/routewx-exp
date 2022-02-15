@@ -15,7 +15,6 @@ import {
 } from '../map/utils'
 import { format, subHours, parse } from 'date-fns'
 import { scaleTime } from 'd3-scale'
-import useSWR from 'swr'
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js')
 
 import 'mapbox-gl/dist/mapbox-gl.css'
