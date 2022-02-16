@@ -1,4 +1,4 @@
-import { format, subHours, parse } from 'date-fns'
+import { format, parse } from 'date-fns'
 
 export function formatTick(ms: number) {
   return format(new Date(ms), 'MMM dd h:mm a')
@@ -18,8 +18,7 @@ export function parseFrameDate(frameName: string) {
 }
 
 export function getFrameUrl(frameName: string) {
-  const uri = 'https://api.routewx.com'
-  return uri + '/services/' + frameName
+  return process.env.NEXT_PUBLIC_API_URL + '/services/' + frameName
 }
 
 export function subtractHours(objDate: Date, intHours: number) {
