@@ -27,7 +27,7 @@ var RTWX = {
   'total-frames': 12,
   'current-frame': 0,
   'current-frame-name': '',
-  'times-endpoint': 'https://api.routewx.com/times?version=2',
+  'times-endpoint': process.env.NEXT_PUBLIC_API_URL + '/times?version=2',
   'date-slider-init': false,
   frames: [],
 }
