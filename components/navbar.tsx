@@ -6,7 +6,10 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-const navLinks = [{ name: 'Articles', href: '/articles', current: false }]
+const navLinks = [
+  { name: 'Route App', href: '/routeApp', current: false },
+  { name: 'Articles', href: '/articles', current: false },
+]
 
 export default function Navbar() {
   const router = useRouter()

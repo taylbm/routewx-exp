@@ -4,8 +4,11 @@ import Head from 'next/head'
 import 'tailwindcss/tailwind.css'
 
 import Layout from 'components/layout'
+import { useRouter } from 'next/router'
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter()
+
   return (
     <>
       <Head>
@@ -14,9 +17,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover'
         />
       </Head>
-      <Layout>
+      {router.pathname === '/routeApp' ? (
         <Component {...pageProps} />
-      </Layout>
+      ) : (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      )}
     </>
   )
 }

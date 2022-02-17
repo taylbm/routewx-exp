@@ -32,10 +32,10 @@ export default function HomeMap({
   const [selectedDate, setSelectedDate] = useState(
     parseFrameDate(mapConfig.frames[0])
   )
-  const minDate = useState(parseFrameDate(mapConfig.frames[0]).toString())
-  const maxDate = useState(
-    parseFrameDate(mapConfig.frames[mapConfig.frames.length - 1]).toString()
-  )
+  const minDate = parseFrameDate(mapConfig.frames[0]).toString()
+  const maxDate = parseFrameDate(
+    mapConfig.frames[mapConfig.frames.length - 1]
+  ).toString()
 
   useEffect(() => {
     const map = createMap(containerId)
