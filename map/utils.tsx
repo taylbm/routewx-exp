@@ -1,8 +1,4 @@
-import { format, parse } from 'date-fns'
-
-export function formatTick(ms: number) {
-  return format(new Date(ms), 'MMM dd h:mm a')
-}
+import { parse } from 'date-fns'
 
 export function parseFrameDate(frameName: string) {
   const parsedDate = parse(
@@ -29,9 +25,9 @@ export function subtractHours(objDate: Date, intHours: number) {
   return newDateObj
 }
 
-export async function getTimes() {
+export async function getTimes(): Promise<string[]> {
   const url = process.env.NEXT_PUBLIC_API_URL + '/times?version=2'
   const response = await fetch(url) // get list of available times
   const times = await response.json()
-  return times
+  return times.dateStrings
 }
