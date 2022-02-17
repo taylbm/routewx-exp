@@ -25,7 +25,7 @@ export default function Footer() {
           ))}
         </nav>
         <p className='mt-8 text-center text-base text-gray-600'>
-          &copy; {curYear} Title
+          &copy; {curYear} RouteWX
         </p>
       </div>
     </footer>

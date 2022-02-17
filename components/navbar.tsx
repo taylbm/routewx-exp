@@ -29,7 +29,7 @@ export default function Navbar() {
               />
             </div>
             <h1 className='ml-2 font-medium group-hover:text-blue-600'>
-              Title
+              RouteWX
             </h1>
           </a>
         </Link>
