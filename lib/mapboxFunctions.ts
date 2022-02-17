@@ -1,4 +1,21 @@
-import { Map } from 'mapbox-gl'
+import { Map, LngLatLike } from 'mapbox-gl'
+
+const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+const style = process.env.NEXT_PUBLIC_MAPBOX_STYLE
+
+export function createMap(
+  container: string,
+  center = [-100, 40] as LngLatLike,
+  zoom = 4
+) {
+  return new Map({
+    accessToken,
+    style,
+    container,
+    center,
+    zoom,
+  })
+}
 
 export function addRasterLayer(
   map: Map,
