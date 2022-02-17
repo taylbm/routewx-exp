@@ -28,3 +28,10 @@ export function subtractHours(objDate: Date, intHours: number) {
 
   return newDateObj
 }
+
+export async function getTimes() {
+  const url = process.env.NEXT_PUBLIC_API_URL + '/times?version=2'
+  const response = await fetch(url) // get list of available times
+  const times = await response.json()
+  return times
+}
