@@ -12,13 +12,7 @@ export default function Home() {
         <RouteMap
           containerId='map'
           className='absolute inset-0 h-screen w-screen'
-        >
-          {/* <div className='absolute z-50 h-12 w-full bg-blue-300'>
-              <Navbar />
-            </div> */}
-
-          {/* <div className='absolute z-50 h-12 w-full bg-blue-300'>logo</div> */}
-        </RouteMap>
+        />
       </div>
     </>
   )

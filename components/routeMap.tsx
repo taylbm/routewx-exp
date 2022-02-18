@@ -12,17 +12,17 @@ import ReactDOMServer from 'react-dom/server'
 
 const originGeocoder = new MapboxGeocoder({
   accessToken: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string,
-  mapboxgl: mapboxgl,
+  mapboxgl: mapboxgl as any,
   countries: 'US',
 })
 
 const destinationGeocoder = new MapboxGeocoder({
   accessToken: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string,
-  mapboxgl: mapboxgl,
+  mapboxgl: mapboxgl as any,
   countries: 'US',
 })
 
-function popupForSegment(segment) {
+function popupForSegment(segment: any) {
   const d = new Date(0) // The 0 there is the key, which sets the date to the epoch
   d.setUTCSeconds(segment.dt)
   console.log(d)
@@ -54,18 +54,18 @@ function popupForSegment(segment) {
 
 export default function RouteMap({
   className = '',
-  children,
+  // children,
   containerId,
 }: {
   className: string
-  children?: JSX.Element | string
+  // children?: JSX.Element | string
   containerId: string
 }) {
   const [map, setMap] = useState<mapboxgl.Map | null>()
 
   const [origin, setOrigin] = useState<[number, number] | null>(null)
   const [destination, setDestination] = useState<[number, number] | null>(null)
-  const [curRouteData, setCurRouteData] = useState<>(null)
+  const [curRouteData, setCurRouteData] = useState(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -158,7 +158,7 @@ export default function RouteMap({
 
     console.log({ curRouteData })
 
-    const features = result.polylines.map((line) => {
+    const features = result.polylines.map((line: any) => {
       return {
         type: 'Feature',
         properties: {
@@ -214,7 +214,7 @@ export default function RouteMap({
       new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(
-          popupForSegment(e.features[0].properties)
+          popupForSegment(e.features ? (e.features[0].properties as any) : '')
           // e.features[0].properties.temp
           // "<div class='font-bold'>howdy there</div>"
         )
@@ -224,7 +224,7 @@ export default function RouteMap({
 
   return (
     <div id={containerId} className={`${className} relative`}>
-      {children}
+      {/* {children} */}
       {/* <div className='absolute top-32 left-4 z-50 flex'>
         <span id='originGeocoder' className='' />
         <span id='geocoder2' className='ml-4' />
