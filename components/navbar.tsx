@@ -21,8 +21,6 @@ export default function Navbar() {
       <header className='flex h-20 space-x-12 px-6'>
         <Link href='/'>
           <a className='group inline-flex items-center'>
-            <div className='relative h-10 w-10'>
-            </div>
             <h1 className='ml-2 font-medium group-hover:text-blue-600'>
               RouteWX
             </h1>
