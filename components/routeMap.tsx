@@ -49,7 +49,7 @@ function popupForSegment(segment: any) {
       <div>Forecast valid at 🕰️: {time}</div>
       <div>Temperature 🌡️: {segment.temp}°F</div>
       <div>1 Hr. Precipitation ☔: {segment.precip} in.</div>
-      <div>1 Hr. Frozen Precipitation 🌨️: {segment.frozenPrecip} in.</div>
+      <div>% Chance of Frozen Precipitation 🌨️: {segment.frozenPrecip}%</div>
       <div>Wind 🌬️: {segment.gust} mph</div>
     </div>
   )

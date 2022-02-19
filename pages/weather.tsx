@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>RouteWX</title>
+        <title>RouteWx</title>
       </Head>
       <div>
         {dateStrings.length && (

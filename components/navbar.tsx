@@ -21,20 +21,20 @@ export default function Navbar() {
           <a className='group inline-flex items-center'>
             <div className='relative h-10 w-10'>
               {/* <Image
-                alt='RouteWX logo'
+                alt='RouteWx logo'
                 className='rounded-full'
                 src='/favicon.png'
                 layout='fill'
                 objectFit='cover'
               /> */}
               <img
-                alt='RouteWX logo'
+                alt='RouteWx logo'
                 className='rounded-full duration-200 group-hover:rotate-45'
                 src='/favicon.png'
               />
             </div>
             <h1 className='ml-2 font-medium group-hover:text-green-600'>
-              RouteWX
+              RouteWx
             </h1>
           </a>
         </Link>

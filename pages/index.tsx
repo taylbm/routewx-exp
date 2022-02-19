@@ -10,10 +10,10 @@ export default function Example() {
             ahead of the weather curve
           </h2>
           <p className='mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl'>
-            RouteWX
+            RouteWx
           </p>
           <img
-            alt='RouteWX logo'
+            alt='RouteWx logo'
             className='mx-auto h-48 w-48 rounded-full py-4'
             src='/favicon.png'
           />
@@ -24,7 +24,7 @@ export default function Example() {
                 Plan your trips safely, using the latest technology.
               </h2>
               <p className='mt-3 text-xl text-gray-500 sm:mt-4'>
-                Powered by Swift Weather Solutions LLC
+                Powered by Swift Weather Solutions
               </p>
             </div>
           </div>
@@ -35,34 +35,34 @@ export default function Example() {
                   <dl className='rounded-lg bg-white shadow-lg sm:grid sm:grid-cols-4'>
                     <div className='flex flex-col border-b border-gray-100 p-6 text-center sm:border-0 sm:border-r'>
                       <dt className='order-2 mt-2 text-lg font-medium leading-6 text-gray-500'>
-                        Rain
+                        Forecasted Chance of Frozen Precipitation
                       </dt>
                       <dd className='order-1 text-5xl font-extrabold text-amber-900'>
-                        100%
+                        Rain or Snow?
                       </dd>
                     </div>
                     <div className='flex flex-col border-t border-b border-gray-100 p-6 text-center sm:border-0 sm:border-l sm:border-r'>
                       <dt className='order-2 mt-2 text-lg font-medium leading-6 text-gray-500'>
-                        Wind
+                        Get Forecasted Wind Gusts
                       </dt>
                       <dd className='order-1 text-5xl font-extrabold text-amber-900'>
-                        24/7
+                        Windy?
                       </dd>
                     </div>
                     <div className='flex flex-col border-t border-gray-100 p-6 text-center sm:border-0 sm:border-l'>
                       <dt className='order-2 mt-2 text-lg font-medium leading-6 text-gray-500'>
-                        Snow
+                        Number of Forecast points per hour
                       </dt>
                       <dd className='order-1 text-5xl font-extrabold text-amber-900'>
-                        100k
+                        1.5 million
                       </dd>
                     </div>
                     <div className='flex flex-col border-t border-gray-100 p-6 text-center sm:border-0 sm:border-l'>
                       <dt className='order-2 mt-2 text-lg font-medium leading-6 text-gray-500'>
+                        from the EPA <a>https://www.airnow.gov</a> API
+                      </dt>
+                      <dd className='order-1 text-5xl font-extrabold text-amber-900'>
                         Air Quality
-                      </dt>
-                      <dd className='order-1 text-5xl font-extrabold text-amber-900'>
-                        4.7/hr
                       </dd>
                     </div>
                   </dl>

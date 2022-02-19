@@ -8,7 +8,7 @@ const navigation = {
   social: [
     {
       name: 'Twitter',
-      href: 'https://twitter.com/routewx',
+      href: 'https://twitter.com/RouteWx',
       icon: TwitterIcon,
     },
   ],
@@ -45,7 +45,7 @@ export default function Example() {
           ))}
         </div>
         <p className='mt-8 text-center text-base text-gray-400'>
-          &copy; {curYear} RouteWX
+          &copy; {curYear} RouteWx
         </p>
       </div>
     </footer>
