@@ -10,6 +10,8 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
+import Modal from './modal'
+import Link from 'next/link'
 
 const originGeocoder = new MapboxGeocoder({
   accessToken: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string,
@@ -23,11 +25,8 @@ const destinationGeocoder = new MapboxGeocoder({
   countries: 'US',
 })
 
-function popupForSegment(segment: any) {
-  const d = new Date(0) // The 0 there is the key, which sets the date to the epoch
-  d.setUTCSeconds(segment.dt)
-  console.log(d)
-  const time = `${(d.getMonth() + 1).toString().padStart(2, '0')}/${d
+function formatDate(d: Date) {
+  return `${(d.getMonth() + 1).toString().padStart(2, '0')}/${d
     .getDate()
     .toString()
     .padStart(2, '0')}/${d.getFullYear()} ${d
@@ -37,14 +36,17 @@ function popupForSegment(segment: any) {
     .getMinutes()
     .toString()
     .padStart(2, '0')} ${getTimezoneName()}`
+}
+
+function popupForSegment(segment: any) {
+  const d = new Date(0) // The 0 there is the key, which sets the date to the epoch
+  d.setUTCSeconds(segment.dt)
+  const time = formatDate(d)
 
   return ReactDOMServer.renderToStaticMarkup(
     <div>
-      <div className='font-lg'>
-        Big Scary Weather Level: {segment.hazardLevel}
-      </div>
+      <div className='font-lg'>Hazard Level: {segment.hazardLevel}</div>
       <div>Forecast valid at 🕰️: {time}</div>
-
       <div>Temperature 🌡️: {segment.temp}°F</div>
       <div>1 Hr. Precipitation ☔: {segment.precip} in.</div>
       <div>1 Hr. Frozen Precipitation 🌨️: {segment.frozenPrecip} in.</div>
@@ -57,8 +59,8 @@ function removeOldRoute(map: mapboxgl.Map, id = 'curRoute') {
   const curLayer = map?.getLayer(id)
 
   if (curLayer) {
-    map?.removeLayer(id)
-    map?.removeSource(id)
+    map.removeLayer(id)
+    map.removeSource(id)
   }
 }
 
@@ -71,8 +73,10 @@ export default function RouteMap({
   children?: JSX.Element | string
   containerId: string
 }) {
-  const [map, setMap] = useState<mapboxgl.Map | null>()
+  const [open, setOpen] = useState(false)
+  const [dialogueText, setDialogueText] = useState('')
 
+  const [map, setMap] = useState<mapboxgl.Map | null>()
   const [origin, setOrigin] = useState<[number, number] | null>(null)
   const [destination, setDestination] = useState<[number, number] | null>(null)
   const [curRouteData, setCurRouteData] = useState(null)
@@ -82,9 +86,6 @@ export default function RouteMap({
     const map = createMap(containerId)
 
     originGeocoder.on('result', ({ result }) => {
-      console.log('changed')
-      console.log({ result })
-      console.log(result.center)
       setOrigin(result.center)
       removeOldRoute(map)
     })
@@ -95,9 +96,6 @@ export default function RouteMap({
     })
 
     destinationGeocoder.on('result', ({ result }) => {
-      console.log('changed')
-      console.log({ result })
-      console.log(result.center)
       setDestination(result.center)
       removeOldRoute(map)
     })
@@ -107,19 +105,35 @@ export default function RouteMap({
       removeOldRoute(map)
     })
 
-    map.addControl(originGeocoder, 'top-left')
-    map.addControl(destinationGeocoder, 'top-right')
+    // map.addControl(originGeocoder, 'top-left')
+    // map.addControl(destinationGeocoder, 'top-right')
 
-    // document.getElementById('originGeocoder').appendChild(originGeocoder.onAdd(map))
-    // document.getElementById('geocoder2').appendChild(geocoder2.onAdd(map))
-    // console.log({ geocoder1 })
-    // geocoder1.on('change', () => {
-
-    //   console.log('chamged!!!')
-    //   console.log({ geocoder1 })
-    // })
+    document
+      .getElementById('originGeocoder')
+      ?.appendChild(originGeocoder.onAdd(map))
+    document
+      .getElementById('destinationGeocoder')
+      ?.appendChild(destinationGeocoder.onAdd(map))
 
     setMap(map)
+
+    return () => {
+      const origGeoParent = document.getElementById(
+        'originGeocoder'
+      ) as HTMLElement
+      if (origGeoParent && origGeoParent.firstChild) {
+        origGeoParent.removeChild(origGeoParent.firstChild)
+        originGeocoder.onRemove()
+      }
+
+      const destGeoParent = document.getElementById(
+        'destinationGeocoder'
+      ) as HTMLElement
+      if (destGeoParent && destGeoParent.firstChild) {
+        destGeoParent.removeChild(destGeoParent.firstChild)
+        destinationGeocoder.onRemove()
+      }
+    }
   }, [containerId])
 
   const getRoute = async () => {
@@ -133,8 +147,6 @@ export default function RouteMap({
     removeOldRoute(map as mapboxgl.Map)
 
     setCurRouteData(result)
-
-    console.log({ curRouteData })
 
     const mapBoundAdjustmentFactor = 0.05
     map?.fitBounds([
@@ -151,8 +163,6 @@ export default function RouteMap({
           result.bounds.northeast.lat * mapBoundAdjustmentFactor,
       ],
     ])
-
-    console.log({ curRouteData })
 
     const features = result.polylines.map((line: any) => {
       return {
@@ -214,15 +224,51 @@ export default function RouteMap({
         )
         .addTo(map)
     })
+
+    const hazardLevels = new Set()
+    result.polylines.forEach((line: any) => {
+      hazardLevels.add(line.hazard_level)
+    })
+
+    if (hazardLevels.has('red')) {
+      setDialogueText(
+        'Heavy and/or Freezing Precipitation/High Winds. Tap Route for forecast details.'
+      )
+    } else if (hazardLevels.has('orange')) {
+      setDialogueText(
+        'Moderate Hazard Wind/Precipitation Possible. Tap Route for forecast details.'
+      )
+    } else {
+      setDialogueText('No Weather Hazards. Tap Route for forecast details.')
+    }
+    setOpen(true)
   }
 
   return (
     <div id={containerId} className={`${className} relative`}>
       {children}
-      {/* <div className='absolute top-32 left-4 z-50 flex'>
-        <span id='originGeocoder' className='' />
-        <span id='geocoder2' className='ml-4' />
-      </div> */}
+      <div className='absolute left-4 z-50 mt-2'>
+        <Link href='/'>
+          <a title='home' className='cursor-pointer'>
+            <img
+              alt='RouteWX logo'
+              src='/favicon.png'
+              className='h-12 w-12 rounded-full shadow-md duration-200 hover:rotate-45'
+            />
+          </a>
+        </Link>
+      </div>
+      <div className='absolute top-4 right-4 z-50 flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4'>
+        <span id='originGeocoder' />
+        <span id='destinationGeocoder' />
+        <button
+          className='cursor-pointer rounded-md border border-transparent bg-indigo-100 px-6 py-1 text-base font-medium text-indigo-700 shadow-md hover:bg-indigo-200 focus:outline-none disabled:cursor-not-allowed disabled:bg-indigo-100 disabled:text-gray-400'
+          disabled={origin === null || destination === null}
+          onClick={getRoute}
+        >
+          Get Route
+        </button>
+      </div>
 
       {loading && (
         <div className='absolute inset-0 z-50 flex cursor-not-allowed items-center justify-center'>
@@ -231,15 +277,12 @@ export default function RouteMap({
         </div>
       )}
 
-      <div className='absolute bottom-6 right-6 z-40'>
-        <button
-          className='inline-flex cursor-pointer items-center rounded-md border border-transparent bg-indigo-100 px-6 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-indigo-100 disabled:text-gray-400'
-          disabled={origin === null || destination === null}
-          onClick={getRoute}
-        >
-          Get Route
-        </button>
-      </div>
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        title='RouteWX Travel Guidance'
+        text={dialogueText}
+      />
     </div>
   )
 }

@@ -37,7 +37,7 @@ export default function Example() {
             <a
               key={item.name}
               href={item.href}
-              className='transform fill-gray-400 transition-all duration-75 hover:scale-125 hover:fill-gray-500'
+              className='transform fill-gray-400 transition-all duration-75 hover:scale-125 hover:fill-amber-700'
             >
               <span className='sr-only'>{item.name}</span>
               <item.icon aria-hidden='true' />
