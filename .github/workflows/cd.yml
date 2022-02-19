@@ -44,6 +44,8 @@ jobs:
           envkey_NEXT_PUBLIC_MAPBOX_STYLE: ${{ secrets.NEXT_PUBLIC_MAPBOX_STYLE }}
           file_name: .env
           fail_on_empty: false
+      - name: install deps
+        run: yarn
       - name: build dist package
         run: yarn prod
       - name: Deploy static site build to S3
