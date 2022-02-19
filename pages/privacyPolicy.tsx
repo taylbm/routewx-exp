@@ -19,7 +19,7 @@ export default function Post({ source }: { source: MDXRemoteSerializeResult }) {
   return (
     <div>
       <Head>
-        <title>RouteWX Privacy Policy</title>
+        <title>RouteWx Privacy Policy</title>
       </Head>
       <article className='prose mx-auto flex w-full max-w-3xl flex-col p-4'>
         <MDXRemote {...source} />

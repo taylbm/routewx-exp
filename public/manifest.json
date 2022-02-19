@@ -1,6 +1,6 @@
 {
-    "name": "RouteWX",
-    "short_name": "RouteWX",
+    "name": "RouteWx",
+    "short_name": "RouteWx",
     "icons": [
       {
         "src": "/icons/manifest-icon-192.maskable.png",
