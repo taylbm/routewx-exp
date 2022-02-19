@@ -7,7 +7,7 @@ import fs from 'fs'
 import Head from 'next/head'
 
 export const getStaticProps: GetStaticProps = async () => {
-  const fileContents = fs.readFileSync('content/example.mdx', 'utf8')
+  const fileContents = fs.readFileSync('content/privacyPolicy.mdx', 'utf8')
 
   const { content, data } = matter(fileContents)
   const mdxSource = await serialize(content)
@@ -19,7 +19,7 @@ export default function Post({ source }: { source: MDXRemoteSerializeResult }) {
   return (
     <div>
       <Head>
-        <title>Example Content</title>
+        <title>RouteWX Privacy Policy</title>
       </Head>
       <article className='prose mx-auto flex w-full max-w-3xl flex-col p-4'>
         <MDXRemote {...source} />

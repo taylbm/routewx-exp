@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { createMap } from 'lib/mapboxFunctions'
 import { getTimezoneName } from 'lib/dateFunctions'
-import 'mapbox-gl/dist/mapbox-gl.css'
-
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
-import mapboxgl from 'mapbox-gl'
-import { getRoute } from 'lib/backendFunctions'
+import { fetchRoute } from 'lib/backendFunctions'
+import Spinner from 'components/icons/spinner'
 
 import ReactDOMServer from 'react-dom/server'
+import mapboxgl from 'mapbox-gl'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+
+import 'mapbox-gl/dist/mapbox-gl.css'
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 
 const originGeocoder = new MapboxGeocoder({
   accessToken: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string,
@@ -52,13 +53,22 @@ function popupForSegment(segment: any) {
   )
 }
 
+function removeOldRoute(map: mapboxgl.Map, id = 'curRoute') {
+  const curLayer = map?.getLayer(id)
+
+  if (curLayer) {
+    map?.removeLayer(id)
+    map?.removeSource(id)
+  }
+}
+
 export default function RouteMap({
   className = '',
-  // children,
+  children,
   containerId,
 }: {
   className: string
-  // children?: JSX.Element | string
+  children?: JSX.Element | string
   containerId: string
 }) {
   const [map, setMap] = useState<mapboxgl.Map | null>()
@@ -71,25 +81,17 @@ export default function RouteMap({
   useEffect(() => {
     const map = createMap(containerId)
 
-    const removeOldRoute = () => {
-      const curLayer = map?.getLayer('curRoute')
-      console.log('considering removing')
-      console.log(curLayer)
-      if (curLayer) {
-        map?.removeLayer('curRoute')
-        map?.removeSource('curRoute')
-        console.log('tried to remove')
-      }
-
-      console.log('wow')
-    }
-
     originGeocoder.on('result', ({ result }) => {
       console.log('changed')
       console.log({ result })
       console.log(result.center)
       setOrigin(result.center)
-      removeOldRoute()
+      removeOldRoute(map)
+    })
+
+    originGeocoder.on('clear', () => {
+      setOrigin(null)
+      removeOldRoute(map)
     })
 
     destinationGeocoder.on('result', ({ result }) => {
@@ -97,13 +99,17 @@ export default function RouteMap({
       console.log({ result })
       console.log(result.center)
       setDestination(result.center)
-      removeOldRoute()
+      removeOldRoute(map)
+    })
+
+    destinationGeocoder.on('clear', () => {
+      setDestination(null)
+      removeOldRoute(map)
     })
 
     map.addControl(originGeocoder, 'top-left')
     map.addControl(destinationGeocoder, 'top-right')
 
-    map.addControl(new mapboxgl.GeolocateControl())
     // document.getElementById('originGeocoder').appendChild(originGeocoder.onAdd(map))
     // document.getElementById('geocoder2').appendChild(geocoder2.onAdd(map))
     // console.log({ geocoder1 })
@@ -116,43 +122,33 @@ export default function RouteMap({
     setMap(map)
   }, [containerId])
 
-  const removeOldRoute = () => {
-    const curLayer = map?.getLayer('curRoute')
-    console.log('considering removing')
-    console.log(curLayer)
-    if (curLayer) {
-      map?.removeLayer('curRoute')
-      map?.removeSource('curRoute')
-      console.log('tried to remove')
-    }
-
-    console.log('wow')
-  }
-
-  const go = async () => {
+  const getRoute = async () => {
     setLoading(true)
-    const result = await getRoute(
+    const result = await fetchRoute(
       origin as [number, number],
       destination as [number, number]
     )
     setLoading(false)
-    console.log({ result })
 
-    removeOldRoute()
+    removeOldRoute(map as mapboxgl.Map)
 
     setCurRouteData(result)
 
     console.log({ curRouteData })
 
-    const mapBoundAdjustmentFactor = 0.5
+    const mapBoundAdjustmentFactor = 0.05
     map?.fitBounds([
       [
-        result.bounds.southwest.lng + mapBoundAdjustmentFactor,
-        result.bounds.southwest.lat - mapBoundAdjustmentFactor,
+        result.bounds.southwest.lng +
+          result.bounds.southwest.lng * mapBoundAdjustmentFactor,
+        result.bounds.southwest.lat -
+          result.bounds.southwest.lat * mapBoundAdjustmentFactor,
       ],
       [
-        result.bounds.northeast.lng - mapBoundAdjustmentFactor,
-        result.bounds.northeast.lat + mapBoundAdjustmentFactor,
+        result.bounds.northeast.lng -
+          result.bounds.northeast.lng * mapBoundAdjustmentFactor,
+        result.bounds.northeast.lat +
+          result.bounds.northeast.lat * mapBoundAdjustmentFactor,
       ],
     ])
 
@@ -215,8 +211,6 @@ export default function RouteMap({
         .setLngLat(e.lngLat)
         .setHTML(
           popupForSegment(e.features ? (e.features[0].properties as any) : '')
-          // e.features[0].properties.temp
-          // "<div class='font-bold'>howdy there</div>"
         )
         .addTo(map)
     })
@@ -224,7 +218,7 @@ export default function RouteMap({
 
   return (
     <div id={containerId} className={`${className} relative`}>
-      {/* {children} */}
+      {children}
       {/* <div className='absolute top-32 left-4 z-50 flex'>
         <span id='originGeocoder' className='' />
         <span id='geocoder2' className='ml-4' />
@@ -233,31 +227,18 @@ export default function RouteMap({
       {loading && (
         <div className='absolute inset-0 z-50 flex cursor-not-allowed items-center justify-center'>
           <div className='absolute inset-0 cursor-not-allowed bg-gray-500 opacity-50' />
-          <svg
-            role='status'
-            className='flex h-16 w-16 animate-spin fill-blue-600 text-gray-200'
-            viewBox='0 0 100 101'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z'
-              fill='currentColor'
-            />
-            <path
-              d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z'
-              fill='currentFill'
-            />
-          </svg>
+          <Spinner />
         </div>
       )}
 
-      <div className='absolute bottom-4 right-4 z-40 rounded-md bg-gray-300 px-4 py-2 opacity-70'>
-        {origin && <span>Origin {origin.toString()}</span>}
-        <br />
-        {destination && <span>Destination {destination.toString()}</span>}
-        <br />
-        <button onClick={go}>go</button>
+      <div className='absolute bottom-6 right-6 z-40'>
+        <button
+          className='inline-flex cursor-pointer items-center rounded-md border border-transparent bg-indigo-100 px-6 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-indigo-100 disabled:text-gray-400'
+          disabled={origin === null || destination === null}
+          onClick={getRoute}
+        >
+          Get Route
+        </button>
       </div>
     </div>
   )

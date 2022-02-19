@@ -1,4 +1,4 @@
-export async function getRoute(
+export async function fetchRoute(
   origin: [number, number],
   destination: [number, number]
 ) {

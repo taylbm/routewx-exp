@@ -24,9 +24,9 @@ export default function Navbar() {
           <a className='group inline-flex items-center'>
             <div className='relative h-10 w-10'>
               <Image
-                alt='Gluten Free'
+                alt='RouteWX logo'
                 className='rounded-full'
-                src='/icon.png'
+                src='/favicon.png'
                 layout='fill'
                 objectFit='cover'
               />
