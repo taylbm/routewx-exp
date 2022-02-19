@@ -5,6 +5,11 @@ class MyDocument extends Document {
     return (
       <Html lang='en' className='h-full'>
         <Head>
+          <meta
+            name='apple-itunes-app'
+            content='app-id=1551376145, app-argument=routewx.com'
+          />
+
           <meta name='application-name' content='RouteWX' />
           <meta name='apple-mobile-web-app-capable' content='yes' />
           <meta
