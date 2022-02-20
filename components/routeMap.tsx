@@ -251,7 +251,7 @@ export default function RouteMap({
         <Link href='/'>
           <a title='home' className='cursor-pointer'>
             <img
-              alt='RouteWX logo'
+              alt='RouteWx logo'
               src='/favicon.png'
               className='h-12 w-12 rounded-full shadow-md duration-200 hover:rotate-45'
             />
@@ -280,7 +280,7 @@ export default function RouteMap({
       <Modal
         open={open}
         setOpen={setOpen}
-        title='RouteWX Travel Guidance'
+        title='RouteWx Travel Guidance'
         text={dialogueText}
       />
     </div>

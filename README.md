@@ -1,4 +1,4 @@
-# Next RouteWX Experiment
+# Next RouteWx Experiment
 
 ## Getting started
 
