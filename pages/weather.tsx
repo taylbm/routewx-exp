@@ -14,9 +14,9 @@ export default function Home() {
     }
     // update every 2 minutes
     const update = setInterval(() => {
-      getAvailableFrames();
-    }, 1000 * 120);
-    return () => clearInterval(update);
+      getAvailableFrames()
+    }, 1000 * 120)
+    return () => clearInterval(update)
   }, [])
 
   return (
