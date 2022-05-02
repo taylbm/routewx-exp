@@ -6,7 +6,7 @@ import {
   showRasterLayer,
 } from 'lib/mapboxFunctions'
 import { parseFrameDate, getFrameUrl } from 'lib/dateFunctions'
-import { LngLatLike } from 'mapbox-gl'
+import mapboxgl, { LngLatLike } from 'mapbox-gl'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -23,21 +23,19 @@ export default function HomeMap({
   children,
   containerId,
   dateStrings = [],
+  initialLoad,
 }: {
   className: string
   children?: JSX.Element | string
   containerId: string
   dateStrings: any[]
+  initialLoad: boolean
 }) {
-  mapConfig.frames = dateStrings
-
   const [selectedDate, setSelectedDate] = useState(
-    parseFrameDate(mapConfig.frames[0])
+    parseFrameDate(dateStrings[0])
   )
-  const minDate = parseFrameDate(mapConfig.frames[0]).toString()
-  const maxDate = parseFrameDate(
-    mapConfig.frames[mapConfig.frames.length - 1]
-  ).toString()
+  const minDate = parseFrameDate(dateStrings[0]).toString()
+  const maxDate = parseFrameDate(dateStrings[dateStrings.length - 1]).toString()
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search)
@@ -53,6 +51,14 @@ export default function HomeMap({
       [centerLonInt, centerLatInt] as LngLatLike,
       zoomInt
     )
+
+    if (!initialLoad) {
+      for (var frame of mapConfig.frames) {
+        map.removeLayer(frame)
+        map.removeSource(frame)
+      }
+    }
+    mapConfig.frames = dateStrings
 
     map.on('load', () => {
       setInterval(() => {
