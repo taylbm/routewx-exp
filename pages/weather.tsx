@@ -12,7 +12,11 @@ export default function Home() {
       const dateStrings = await getTimes()
       setDateStrings(dateStrings.slice(-12))
     }
-    getAvailableFrames()
+    // update every 2 minutes
+    const update = setInterval(() => {
+      getAvailableFrames();
+    }, 1000 * 120);
+    return () => clearInterval(update);
   }, [])
 
   return (
