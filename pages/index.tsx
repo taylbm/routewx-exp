@@ -1,208 +1,105 @@
-import Head from 'next/head'
-import { useEffect, useState } from 'react'
-import { Slider, Rail, Handles, Tracks, Ticks } from 'react-compound-slider'
-import { SliderRail, Handle, Track, Tick } from './components'
-import {
-  addRasterLayer,
-  hideRasterLayer,
-  showRasterLayer,
-} from '../map/rasterLayer'
-import {
-  parseFrameDate,
-  formatTick,
-  getFrameUrl,
-  subtractHours,
-} from '../map/utils'
-import { format, subHours, parse } from 'date-fns'
-import { scaleTime } from 'd3-scale'
-const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js')
+import Link from 'next/link'
 
-import 'mapbox-gl/dist/mapbox-gl.css'
-
-var RTWX = {
-  'shsr-visible': true,
-  'shsr-opacity': 0.85,
-  'animation-delay': 200,
-  'animation-duration': 0,
-  'total-frames': 12,
-  'current-frame': 0,
-  'current-frame-name': '',
-  'times-endpoint': process.env.NEXT_PUBLIC_API_URL + '/times?version=2',
-  'date-slider-init': false,
-  frames: [],
-}
-const step = 1000 * 60 * 4
-const sliderStyle = {
-  position: 'absolute',
-  width: '90%',
-  bottom: '10%',
-  left: '5%',
-}
-
-export default function Home() {
-  const [pageIsMounted, setPageIsMounted] = useState(false)
-  const [Map, setMap] = useState()
-  const [selectedDate, setSelectedDate] = useState(new Date())
-  const [updatedDate, setUpdatedDate] = useState(new Date())
-  const [minDate, setMinDate] = useState(subtractHours(new Date(), 1))
-  const [maxDate, setMaxDate] = useState(new Date())
-
-  useEffect(() => {
-    let map = new mapboxgl.Map({
-      accessToken: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
-      container: 'map', // container ID
-      style: 'mapbox://styles/mapbox/streets-v11', // style URL
-      center: [-100, 40], // starting position [lng, lat]
-      zoom: 4, // starting zoom
-    })
-
-    setMap(map)
-    setPageIsMounted(true)
-
-    // Create an scoped async function in the hook
-    async function getAvailableFrames() {
-      const response = await fetch(RTWX['times-endpoint']) // get list of available times
-      const times = await response.json() // parse JSON
-      const dateStrings = times['dateStrings']
-      RTWX['frames'] = dateStrings
-      const totalFrames = RTWX['total-frames']
-      const min = parseFrameDate(
-        dateStrings[dateStrings.length - 1 - totalFrames]
-      )
-      const max = parseFrameDate(dateStrings[dateStrings.length - 1])
-
-      setMinDate(min)
-      setMaxDate(max)
-    }
-    getAvailableFrames()
-  }, [])
-
-  useEffect(() => {
-    if (pageIsMounted) {
-      Map.on('load', function () {
-        let intervalId = setInterval(() => {
-          if (RTWX['frames'].length > 0) {
-            var currentFrameMod = RTWX['current-frame'] % RTWX['total-frames']
-            let currentFrameIdx =
-              RTWX['frames'].length - RTWX['total-frames'] + currentFrameMod - 1
-            let currentFrameDateStr = RTWX['frames'][currentFrameIdx]
-            let currentFrameUrl = getFrameUrl(currentFrameDateStr)
-            let currentFrameDate = parseFrameDate(currentFrameDateStr)
-            var shsrLayer = Map.getLayer(currentFrameDateStr)
-
-            setSelectedDate(currentFrameDate)
-
-            if (RTWX['current-frame'] > 0) {
-              let previousFrameIdx =
-                currentFrameMod === 0
-                  ? RTWX['frames'].length - 2
-                  : RTWX['frames'].length -
-                    RTWX['total-frames'] +
-                    currentFrameMod -
-                    2
-              let previousFrameDateStr = RTWX['frames'][previousFrameIdx]
-              hideRasterLayer(
-                Map,
-                RTWX['animation-duration'],
-                previousFrameDateStr
-              )
-            }
-            if (typeof shsrLayer === 'undefined') {
-              addRasterLayer(
-                Map,
-                currentFrameUrl,
-                currentFrameDateStr,
-                RTWX['shsr-opacity']
-              )
-            }
-            if (RTWX['shsr-visible']) {
-              showRasterLayer(
-                Map,
-                RTWX['animation-duration'],
-                RTWX['shsr-opacity'],
-                currentFrameDateStr
-              )
-            }
-            RTWX['current-frame'] += 1
-            const datetimeDisplay = document.getElementById('datetime-display')
-            if (datetimeDisplay !== null) {
-              datetimeDisplay.innerHTML = currentFrameDate.toString()
-            }
-          }
-        }, 0.25 * 1000)
-      })
-    }
-  }, [pageIsMounted, setMap, Map])
-
-  const onSliderChange = ([ms]: readonly number[]) => {
-    setSelectedDate(new Date(ms))
-  }
-  const onSliderUpdate = ([ms]: readonly number[]) => {
-    setUpdatedDate(new Date(ms))
-  }
-  const dateTicks = scaleTime()
-    .domain([minDate, maxDate])
-    .ticks(8)
-    .map((d) => +d)
-
+/* This example requires Tailwind CSS v2.0+ */
+export default function Example() {
   return (
-    <div>
-      <div>
-        <Slider
-          mode={1}
-          step={step}
-          domain={[+minDate, +maxDate]}
-          rootStyle={sliderStyle}
-          onUpdate={onSliderUpdate}
-          onChange={onSliderChange}
-          values={[+selectedDate]}
-        >
-          <Rail>
-            {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}
-          </Rail>
-          <Handles>
-            {({ handles, getHandleProps }) => (
-              <div>
-                {handles.map((handle) => (
-                  <Handle
-                    key={handle.id}
-                    handle={handle}
-                    domain={[+minDate, +maxDate]}
-                    getHandleProps={getHandleProps}
-                  />
-                ))}
+    <div className='bg-white'>
+      <div className='md:b-12 mx-auto max-w-7xl px-4 pb-8 md:px-6 lg:px-8'>
+        <div className='text-center'>
+          <h2 className='text-base font-semibold uppercase tracking-wide text-amber-900'>
+            ahead of the weather curve
+          </h2>
+          <p className='mt-1 text-4xl font-extrabold text-gray-900 md:text-5xl md:tracking-tight lg:text-6xl'>
+            RouteWx
+          </p>
+          <img
+            alt='RouteWx logo'
+            className='mx-auto h-48 w-48 rounded-full py-4'
+            src='/favicon.png'
+          />
+
+          <div className='mx-auto mt-6 px-4 md:px-6 lg:px-8'>
+            <div className='mx-auto max-w-4xl text-center'>
+              <h2 className='text-3xl font-extrabold text-gray-900 md:text-4xl'>
+                Plan your trips safely, using the latest technology.
+              </h2>
+              <p className='mt-3 text-xl text-gray-500 md:mt-4'>
+                Powered by Swift Weather Solutions
+              </p>
+            </div>
+          </div>
+          <div className='mt-10 bg-white pb-12 md:pb-16'>
+            <div className='relative'>
+              <div className='relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8'>
+                <div className='mx-auto max-w-4xl'>
+                  <dl className='items-end rounded-lg bg-white shadow-lg md:grid md:grid-cols-4'>
+                    <div className='flex flex-col border-b border-gray-100 p-6 text-center md:border-0 md:border-r'>
+                      <dt className='order-2 mt-2 text-lg font-medium leading-6 text-gray-500'>
+                        Forecasted chance of frozen precipitation
+                      </dt>
+                      <dd className='order-1 text-5xl font-extrabold text-amber-900'>
+                        Rain or Snow?
+                      </dd>
+                    </div>
+                    <div className='flex flex-col border-t border-b border-gray-100 p-6 text-center md:border-0 md:border-l md:border-r'>
+                      <dt className='order-2 mt-2 text-lg font-medium leading-6 text-gray-500'>
+                        Forecasted wind gusts
+                      </dt>
+                      <dd className='order-1 text-5xl font-extrabold text-amber-900'>
+                        Windy?
+                      </dd>
+                    </div>
+                    <div className='flex flex-col border-t border-gray-100 p-6 text-center md:border-0 md:border-l'>
+                      <dt className='order-2 mt-2 text-lg font-medium leading-6 text-gray-500'>
+                        Number of forecast points per hour
+                      </dt>
+                      <dd className='order-1 text-5xl font-extrabold text-amber-900'>
+                        1.5 million
+                      </dd>
+                    </div>
+                    <div className='flex flex-col border-t border-gray-100 p-6 text-center md:border-0 md:border-l'>
+                      <dt className='order-2 mt-2 text-lg font-medium leading-6 text-gray-500'>
+                        from the EPA{' '}
+                        <a
+                          className='font-bold italic hover:text-amber-700'
+                          href='https://www.airnow.gov'
+                        >
+                          AirNow
+                        </a>{' '}
+                        API
+                      </dt>
+                      <dd className='order-1 text-5xl font-extrabold text-amber-900'>
+                        Air Quality
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
               </div>
-            )}
-          </Handles>
-          <Tracks right={false}>
-            {({ tracks, getTrackProps }) => (
-              <div>
-                {tracks.map(({ id, source, target }) => (
-                  <Track
-                    key={id}
-                    source={source}
-                    target={target}
-                    getTrackProps={getTrackProps}
-                  />
-                ))}
-              </div>
-            )}
-          </Tracks>
-          <Ticks values={dateTicks}>
-            {({ ticks }) => (
-              <div>
-                {ticks.map((tick) => (
-                  <Tick
-                    key={tick.id}
-                    tick={tick}
-                    count={ticks.length}
-                    format={formatTick}
-                  />
-                ))}
-              </div>
-            )}
-          </Ticks>
-        </Slider>
+            </div>
+          </div>
+
+          <h2 className='mt-4 text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl'>
+            <span className='block'>Ready to dive in?</span>
+            <span className='block'>Try out the demo today.</span>
+          </h2>
+          <div className='mt-8 flex justify-center'>
+            <div className='inline-flex rounded-md shadow'>
+              <Link href='/demo'>
+                <a className='inline-flex items-center justify-center rounded-md border border-transparent bg-amber-700 px-5 py-3 text-base font-medium text-white hover:bg-green-700'>
+                  Go to demo
+                </a>
+              </Link>
+            </div>
+            {/* <div className='ml-3 inline-flex'>
+              <a
+                href='#'
+                className='inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-100 px-5 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200'
+              >
+                Learn more
+              </a>
+            </div> */}
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -5,54 +5,29 @@ class MyDocument extends Document {
     return (
       <Html lang='en' className='h-full'>
         <Head>
-          <meta name='application-name' content='' />
+          <meta
+            name='apple-itunes-app'
+            content='app-id=1551376145, app-argument=routewx.com'
+          />
+
+          <meta name='application-name' content='RouteWx' />
           <meta name='apple-mobile-web-app-capable' content='yes' />
           <meta
             name='apple-mobile-web-app-status-bar-style'
             content='default'
           />
-          <meta name='apple-mobile-web-app-title' content='' />
+          <meta name='apple-mobile-web-app-title' content='RouteWx' />
           <meta name='description' content='' />
           <meta name='format-detection' content='telephone=no' />
           <meta name='mobile-web-app-capable' content='yes' />
 
           <meta name='theme-color' content='#ffffff' />
 
-          <link rel='apple-touch-icon' href='/icons-auto/apple-icon-180.png' />
-          <link
-            rel='apple-touch-icon'
-            sizes='152x152'
-            href='/icons/touch-icon-ipad.png'
-          />
-          <link
-            rel='apple-touch-icon'
-            sizes='180x180'
-            href='/icons/touch-icon-iphone-retina.png'
-          />
-          <link
-            rel='apple-touch-icon'
-            sizes='167x167'
-            href='/icons/touch-icon-ipad-retina.png'
-          />
+          <link rel='apple-touch-icon' href='/icons/apple-icon-180.png' />
 
-          <link
-            rel='icon'
-            type='image/png'
-            sizes='32x32'
-            href='/icons/favicon-32x32.png'
-          />
-          <link
-            rel='icon'
-            type='image/png'
-            sizes='16x16'
-            href='/icons/favicon-16x16.png'
-          />
           <link rel='manifest' href='/manifest.json' />
-          <link
-            rel='mask-icon'
-            href='/icons-auto/manifest-icon-192.maskable.png'
-          />
-          <link rel='icon' href='/favicon.ico' />
+          <link rel='mask-icon' href='/icons/manifest-icon-192.maskable.png' />
+          <link rel='icon' href='/favicon.png' />
 
           <meta name='twitter:card' content='' />
           <meta name='twitter:url' content='' />
@@ -66,11 +41,26 @@ class MyDocument extends Document {
           <meta property='og:site_name' content='' />
           <meta property='og:url' content='' key='og:url' />
           <meta property='og:image' content='' key='og:image' />
+          {/* Global Site Tag (gtag.js) - Google Analytics */}
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+              page_path: window.location.pathname,
+            });
+          `,
+            }}
+          />
         </Head>
 
         <body className='h-full'>
-          <div id='datetime-display' />
-          <div id='map' className='h-screen w-full' />
           <Main />
           <NextScript />
         </body>
