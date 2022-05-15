@@ -1,6 +1,6 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
-/* This example requires Tailwind CSS v2.0+ */
 export default function Example() {
   return (
     <div className='bg-white'>
@@ -12,10 +12,12 @@ export default function Example() {
           <p className='mt-1 text-4xl font-extrabold text-gray-900 md:text-5xl md:tracking-tight lg:text-6xl'>
             RouteWx
           </p>
-          <img
+          <Image
             alt='RouteWx logo'
-            className='mx-auto h-48 w-48 rounded-full py-4'
+            className='mx-auto rounded-full py-4'
             src='/favicon.png'
+            height={192}
+            width={192}
           />
 
           <div className='mx-auto mt-6 px-4 md:px-6 lg:px-8'>

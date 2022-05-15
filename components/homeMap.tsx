@@ -6,7 +6,7 @@ import {
   showRasterLayer,
 } from 'lib/mapboxFunctions'
 import { parseFrameDate, getFrameUrl } from 'lib/dateFunctions'
-import mapboxgl, { LngLatLike } from 'mapbox-gl'
+import { LngLatLike } from 'mapbox-gl'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -103,7 +103,7 @@ export default function HomeMap({
         }
       }, 250)
     })
-  }, [containerId, dateStrings])
+  }, [containerId, dateStrings, initialLoad])
 
   return (
     <div id={containerId} className={`${className} relative`}>

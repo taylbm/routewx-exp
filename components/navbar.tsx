@@ -1,4 +1,4 @@
-// import Image from 'next/image'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -19,20 +19,13 @@ export default function Navbar() {
       <header className='flex h-20 space-x-12 px-6'>
         <Link href='/'>
           <a className='group inline-flex items-center'>
-            <div className='relative h-10 w-10'>
-              {/* <Image
-                alt='RouteWx logo'
-                className='rounded-full'
-                src='/favicon.png'
-                layout='fill'
-                objectFit='cover'
-              /> */}
-              <img
-                alt='RouteWx logo'
-                className='rounded-full duration-200 group-hover:rotate-45'
-                src='/favicon.png'
-              />
-            </div>
+            <Image
+              alt='RouteWx logo'
+              className='rounded-full duration-200 group-hover:rotate-45'
+              src='/favicon.png'
+              height={40}
+              width={40}
+            />
             <h1 className='ml-2 font-medium group-hover:text-green-600'>
               RouteWx
             </h1>

@@ -1,10 +1,9 @@
 import { GetStaticProps } from 'next'
+import Head from 'next/head'
 import { serialize } from 'next-mdx-remote/serialize'
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
 import matter from 'gray-matter'
 import fs from 'fs'
-
-import Head from 'next/head'
 
 export const getStaticProps: GetStaticProps = async () => {
   const fileContents = fs.readFileSync('content/privacyPolicy.mdx', 'utf8')

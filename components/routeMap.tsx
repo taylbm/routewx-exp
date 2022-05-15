@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { createMap } from 'lib/mapboxFunctions'
 import { getTimezoneName } from 'lib/dateFunctions'
 import { fetchRoute } from 'lib/backendFunctions'
@@ -11,7 +12,7 @@ import { LngLatLike } from 'mapbox-gl'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
-import Modal from './modal'
+import Modal from 'components/modal'
 import Link from 'next/link'
 
 const originGeocoder = new MapboxGeocoder({
@@ -251,10 +252,12 @@ export default function RouteMap({
       <div className='absolute left-4 z-50 mt-2'>
         <Link href='/'>
           <a title='home' className='cursor-pointer'>
-            <img
+            <Image
               alt='RouteWx logo'
               src='/favicon.png'
-              className='h-12 w-12 rounded-full shadow-md duration-200 hover:rotate-45'
+              className='rounded-full shadow-md duration-200 hover:rotate-45'
+              height={48}
+              width={48}
             />
           </a>
         </Link>
