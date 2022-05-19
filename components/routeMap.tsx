@@ -11,7 +11,7 @@ import { LngLatLike } from 'mapbox-gl'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
-import Modal from './modal'
+import Modal from 'components/modal'
 import Link from 'next/link'
 
 const originGeocoder = new MapboxGeocoder({

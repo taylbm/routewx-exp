@@ -6,7 +6,6 @@ import Head from 'next/head'
 
 export default function Home() {
   const [dateStrings, setDateStrings] = useState<string[]>([])
-  const [initalLoad, setInitialLoad] = useState<boolean>(true)
 
   useEffect(() => {
     async function getAvailableFrames() {
@@ -16,7 +15,6 @@ export default function Home() {
     getAvailableFrames()
     // update every 2 minutes
     const update = setInterval(() => {
-      setInitialLoad(false)
       getAvailableFrames()
     }, 1000 * 120)
     return () => clearInterval(update)
@@ -30,7 +28,6 @@ export default function Home() {
       <div>
         {dateStrings.length && (
           <HomeMap
-            initialLoad={initalLoad}
             dateStrings={dateStrings}
             containerId='map'
             className='h-screen w-full flex-grow'
