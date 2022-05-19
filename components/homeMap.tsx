@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   createMap,
   addRasterLayer,
@@ -15,7 +15,6 @@ let mapConfig = {
   shsrOpacity: 0.85,
   animationDuration: 0,
   currentFrame: 0,
-  frames: [] as string[],
 }
 
 export default function HomeMap({
@@ -23,19 +22,20 @@ export default function HomeMap({
   children,
   containerId,
   dateStrings = [],
-  initialLoad,
 }: {
   className: string
   children?: JSX.Element | string
   containerId: string
   dateStrings: any[]
-  initialLoad: boolean
 }) {
   const [selectedDate, setSelectedDate] = useState(
     parseFrameDate(dateStrings[0])
   )
   const minDate = parseFrameDate(dateStrings[0]).toString()
   const maxDate = parseFrameDate(dateStrings[dateStrings.length - 1]).toString()
+  const [map, setMap] = useState<mapboxgl.Map>()
+  const [mapFrames, setMapFrames] = useState([] as string[])
+  const [mapLoaded, setMapLoaded] = useState(false)
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search)
@@ -52,24 +52,39 @@ export default function HomeMap({
       zoomInt
     )
 
-    if (!initialLoad) {
-      for (var frame of mapConfig.frames) {
-        map.removeLayer(frame)
-        map.removeSource(frame)
-      }
-    }
-    mapConfig.frames = dateStrings
-
     map.on('load', () => {
-      setInterval(() => {
-        if (mapConfig.frames.length > 0) {
-          const previousFrameDateStr = mapConfig.frames[mapConfig.currentFrame]
+      setMapLoaded(true)
+    })
+
+    setMap(map)
+  }, [containerId])
+
+  const intervalIdRef = useRef<NodeJS.Timer>()
+
+  useEffect(() => {
+    if (map && mapLoaded) {
+      for (var frame of mapFrames) {
+        if (map.getLayer(frame)) {
+          map.removeLayer(frame)
+        }
+        if (map.getSource(frame)) {
+          map.removeSource(frame)
+        }
+      }
+
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current)
+      }
+
+      intervalIdRef.current = setInterval(() => {
+        if (mapFrames.length > 0) {
+          const previousFrameDateStr = mapFrames[mapConfig.currentFrame]
           let oldLayer = map.getLayer(previousFrameDateStr)
 
           mapConfig.currentFrame =
-            (mapConfig.currentFrame + 1) % mapConfig.frames.length
+            (mapConfig.currentFrame + 1) % mapFrames.length
 
-          let currentFrameDateStr = mapConfig.frames[mapConfig.currentFrame]
+          let currentFrameDateStr = mapFrames[mapConfig.currentFrame]
           let currentFrameUrl = getFrameUrl(currentFrameDateStr)
           let currentFrameDate = parseFrameDate(currentFrameDateStr)
           let shsrLayer = map.getLayer(currentFrameDateStr)
@@ -102,8 +117,10 @@ export default function HomeMap({
           }
         }
       }, 250)
-    })
-  }, [containerId, dateStrings, initialLoad])
+
+      setMapFrames(dateStrings)
+    }
+  }, [dateStrings, map, mapFrames, mapLoaded])
 
   return (
     <div id={containerId} className={`${className} relative`}>
