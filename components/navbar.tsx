@@ -22,6 +22,7 @@ export default function Navbar() {
               alt='RouteWx logo'
               className='rounded-full duration-200 group-hover:rotate-45'
               src='/favicon.png'
+              width='48px'
             />
             <h1 className='ml-2 font-medium group-hover:text-green-600'>
               RouteWx

@@ -13,8 +13,9 @@ export default function Example() {
           </p>
           <img
             alt='RouteWx logo'
-            className='mx-auto h-48 w-48 rounded-full py-4'
+            className='rounded-full duration-200 group-hover:rotate-45'
             src='/favicon.png'
+            width='48px'
           />
 
           <div className='mx-auto mt-6 px-4 md:px-6 lg:px-8'>
