@@ -253,8 +253,9 @@ export default function RouteMap({
           <a title='home' className='cursor-pointer'>
             <img
               alt='RouteWx logo'
+              className='rounded-full duration-200 group-hover:rotate-45'
               src='/favicon.png'
-              className='h-12 w-12 rounded-full shadow-md duration-200 hover:rotate-45'
+              width='48px'
             />
           </a>
         </Link>
