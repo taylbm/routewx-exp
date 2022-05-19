@@ -1439,10 +1439,10 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@tailwindcss/forms@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.5.1.tgz#7fe86b9b67e6d91cb902e2d3f4ebe561cc057a13"
-  integrity sha512-QSwsFORnC2BAP0lRzQkz1pw+EzIiiPdk4e27vGQjyXkwJPeC7iLIRVndJzf9CJVbcrrIcirb/TfxF3gRTyFEVA==
+"@tailwindcss/forms@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.5.2.tgz#4ef45f9916dcb37838cbe7fecdcc4ba7a7c2ab59"
+  integrity sha512-pSrFeJB6Bg1Mrg9CdQW3+hqZXAKsBrSG9MAfFLKy1pVA4Mb4W7C0k7mEhlmS2Dfo/otxrQOET7NJiJ9RrS563w==
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
@@ -1573,7 +1573,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/mapbox-gl@*", "@types/mapbox-gl@^2.6.1":
+"@types/mapbox-gl@*":
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/@types/mapbox-gl/-/mapbox-gl-2.7.1.tgz#d848793a3a350bdec48043b9fcf68c1b87733348"
   integrity sha512-qr2cWQIJ12TMQg6cYc/FELgwXgcuLlDxcFyQH2EMdr3R8Mg5PFQUNZP5M4ZUanRVwJdQ10pMEVRTAjW9HqLdzg==
