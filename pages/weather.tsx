@@ -6,7 +6,6 @@ import Head from 'next/head'
 
 export default function Home() {
   const [dateStrings, setDateStrings] = useState<string[]>([])
-  const [initalLoad, setInitialLoad] = useState<boolean>(true)
 
   useEffect(() => {
     async function getAvailableFrames() {

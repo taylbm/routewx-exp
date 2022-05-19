@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { createMap } from 'lib/mapboxFunctions'
 import { getTimezoneName } from 'lib/dateFunctions'
 import { fetchRoute } from 'lib/backendFunctions'
@@ -252,12 +251,10 @@ export default function RouteMap({
       <div className='absolute left-4 z-50 mt-2'>
         <Link href='/'>
           <a title='home' className='cursor-pointer'>
-            <Image
+            <img
               alt='RouteWx logo'
               src='/favicon.png'
-              className='rounded-full shadow-md duration-200 hover:rotate-45'
-              height={48}
-              width={48}
+              className='h-12 w-12 rounded-full shadow-md duration-200 hover:rotate-45'
             />
           </a>
         </Link>
