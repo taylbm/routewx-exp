@@ -11,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     async function getAvailableFrames() {
       const dateStrings = await getTimes()
-      setDateStrings(dateStrings.slice(-12))
+      setDateStrings(dateStrings.slice(-20))
     }
     getAvailableFrames()
     // update every 2 minutes
