@@ -20,10 +20,13 @@ export default function Example() {
           <div className='mx-auto mt-6 px-4 md:px-6 lg:px-8'>
             <div className='mx-auto max-w-4xl text-center'>
               <h2 className='text-3xl font-extrabold text-gray-900 md:text-4xl'>
-                Plan your trips safely, using the latest technology.
+                Plan your trips safely, using the latest weather forecasts.
               </h2>
               <p className='mt-3 text-xl text-gray-500 md:mt-4'>
-                Powered by Swift Weather Solutions
+                Powered by{' '}
+                <a href='https://api.swiftweather.co/'>
+                  Swift Weather Solutions
+                </a>
               </p>
             </div>
           </div>
@@ -34,7 +37,8 @@ export default function Example() {
                   <dl className='items-end rounded-lg bg-white shadow-lg md:grid md:grid-cols-4'>
                     <div className='flex flex-col border-b border-gray-100 p-6 text-center md:border-0 md:border-r'>
                       <dt className='order-2 mt-2 text-lg font-medium leading-6 text-gray-500'>
-                        Forecasted chance of frozen precipitation
+                        Forecasted chance of frozen precipitation and live
+                        weather radar data
                       </dt>
                       <dd className='order-1 text-5xl font-extrabold text-amber-900'>
                         Rain or Snow?
