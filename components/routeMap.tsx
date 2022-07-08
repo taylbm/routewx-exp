@@ -50,7 +50,7 @@ function popupForSegment(segment: any) {
       <div>Forecast valid at 🕰️: {time}</div>
       <div>Temperature 🌡️: {segment.temp}°F</div>
       <div>1 Hr. Precipitation ☔: {segment.precip} in.</div>
-      <div>% Chance of Frozen Precipitation 🌨️: {segment.frozenPrecip}%</div>
+      <div>Chance of Frozen Precipitation 🌨️: {segment.frozenPrecip}%</div>
       <div>Wind 🌬️: {segment.gust} mph</div>
     </div>
   )
@@ -84,7 +84,19 @@ export default function RouteMap({
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const map = createMap(containerId, [100, 40] as LngLatLike, 4)
+    const queryParams = new URLSearchParams(window.location.search)
+    const centerLat = queryParams.get('centerLat') ?? '40'
+    const centerLon = queryParams.get('centerLon') ?? '-100'
+    const zoom = queryParams.get('zoom') ?? '4'
+    const centerLatInt = parseInt(centerLat, 10)
+    const centerLonInt = parseInt(centerLon, 10)
+    const zoomInt = parseInt(zoom, 10)
+
+    const map = createMap(
+      containerId,
+      [centerLonInt, centerLatInt] as LngLatLike,
+      zoomInt
+    )
 
     originGeocoder.on('result', ({ result }) => {
       setOrigin(result.center)
