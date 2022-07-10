@@ -20,7 +20,7 @@ export default function Navbar() {
           <a className='group inline-flex items-center'>
             <img
               alt='RouteWx logo'
-              className='rounded-full duration-200 group-hover:rotate-45'
+              className='h-12 w-12 rounded-full duration-200 group-hover:rotate-45'
               src='/favicon.png'
             />
             <h1 className='ml-2 font-medium group-hover:text-green-600'>
