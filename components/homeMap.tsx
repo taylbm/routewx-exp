@@ -322,7 +322,64 @@ export default function HomeMap({
         }
       })
 
-      const watchesWarningsLayer = map.getLayer('watches-warnings-layer')
+
+      for (var frame of mapFrames) {
+        if (map.getLayer(frame)) {
+          map.removeLayer(frame)
+        }
+        if (map.getSource(frame)) {
+          map.removeSource(frame)
+        }
+      }
+
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current)
+      }
+
+      intervalIdRef.current = setInterval(() => {
+        if (mapFrames.length > 0) {
+          const previousFrameDateStr = mapFrames[mapConfig.currentFrame]
+          let oldLayer = map.getLayer(previousFrameDateStr)
+
+          mapConfig.currentFrame =
+            (mapConfig.currentFrame + 1) % mapFrames.length
+
+          let currentFrameDateStr = mapFrames[mapConfig.currentFrame]
+          let currentFrameUrl = getFrameUrl(currentFrameDateStr)
+          let currentFrameDate = parseFrameDate(currentFrameDateStr)
+          let shsrLayer = map.getLayer(currentFrameDateStr)
+
+          setSelectedDate(currentFrameDate)
+
+          if (mapConfig.shsrVisible) {
+            if (typeof shsrLayer === 'undefined') {
+              addRasterLayer(
+                map,
+                currentFrameUrl,
+                currentFrameDateStr,
+                mapConfig.shsrOpacity
+              )
+            } else {
+              showRasterLayer(
+                map,
+                mapConfig.animationDuration,
+                mapConfig.shsrOpacity,
+                currentFrameDateStr
+              )
+            }
+          }
+          if (oldLayer) {
+            hideRasterLayer(
+              map,
+              mapConfig.animationDuration,
+              previousFrameDateStr
+            )
+          }
+        }
+      }, 250)
+
+      setMapFrames(dateStrings)
+            const watchesWarningsLayer = map.getLayer('watches-warnings-layer')
       const warningsLayer = map.getLayer('warnings-layer')
 
       if (typeof watchesWarningsLayer === 'undefined') {
@@ -641,7 +698,7 @@ export default function HomeMap({
               'rgba(57, 121, 57, 255)',
               '#AAAAAA',
             ],
-            'line-width': 1,
+            'line-width': 2,
           },
         })
         map.addLayer({
@@ -661,62 +718,6 @@ export default function HomeMap({
             source.setData(data)
           })
       }
-      for (var frame of mapFrames) {
-        if (map.getLayer(frame)) {
-          map.removeLayer(frame)
-        }
-        if (map.getSource(frame)) {
-          map.removeSource(frame)
-        }
-      }
-
-      if (intervalIdRef.current) {
-        clearInterval(intervalIdRef.current)
-      }
-
-      intervalIdRef.current = setInterval(() => {
-        if (mapFrames.length > 0) {
-          const previousFrameDateStr = mapFrames[mapConfig.currentFrame]
-          let oldLayer = map.getLayer(previousFrameDateStr)
-
-          mapConfig.currentFrame =
-            (mapConfig.currentFrame + 1) % mapFrames.length
-
-          let currentFrameDateStr = mapFrames[mapConfig.currentFrame]
-          let currentFrameUrl = getFrameUrl(currentFrameDateStr)
-          let currentFrameDate = parseFrameDate(currentFrameDateStr)
-          let shsrLayer = map.getLayer(currentFrameDateStr)
-
-          setSelectedDate(currentFrameDate)
-
-          if (mapConfig.shsrVisible) {
-            if (typeof shsrLayer === 'undefined') {
-              addRasterLayer(
-                map,
-                currentFrameUrl,
-                currentFrameDateStr,
-                mapConfig.shsrOpacity
-              )
-            } else {
-              showRasterLayer(
-                map,
-                mapConfig.animationDuration,
-                mapConfig.shsrOpacity,
-                currentFrameDateStr
-              )
-            }
-          }
-          if (oldLayer) {
-            hideRasterLayer(
-              map,
-              mapConfig.animationDuration,
-              previousFrameDateStr
-            )
-          }
-        }
-      }, 250)
-
-      setMapFrames(dateStrings)
     }
   }, [dateStrings, map, mapFrames, mapLoaded])
 

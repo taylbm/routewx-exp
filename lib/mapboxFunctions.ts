@@ -35,7 +35,7 @@ export function addRasterLayer(
     paint: {
       'raster-opacity': opacity,
     },
-  })
+  }, 'warnings-layer')
 }
 
 export function showRasterLayer(
