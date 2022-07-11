@@ -322,7 +322,6 @@ export default function HomeMap({
         }
       })
 
-
       for (var frame of mapFrames) {
         if (map.getLayer(frame)) {
           map.removeLayer(frame)
@@ -379,7 +378,7 @@ export default function HomeMap({
       }, 250)
 
       setMapFrames(dateStrings)
-            const watchesWarningsLayer = map.getLayer('watches-warnings-layer')
+      const watchesWarningsLayer = map.getLayer('watches-warnings-layer')
       const warningsLayer = map.getLayer('warnings-layer')
 
       if (typeof watchesWarningsLayer === 'undefined') {

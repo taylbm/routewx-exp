@@ -28,14 +28,17 @@ export function addRasterLayer(
       'Seamless Hybrid-Scan Reflectivity (https://vlab.noaa.gov/web/wdtd/-/seamless-hybrid-scan-reflectivity-shsr-) ',
   })
 
-  map.addLayer({
-    id: currentFrameDateStr,
-    type: 'raster',
-    source: currentFrameDateStr,
-    paint: {
-      'raster-opacity': opacity,
+  map.addLayer(
+    {
+      id: currentFrameDateStr,
+      type: 'raster',
+      source: currentFrameDateStr,
+      paint: {
+        'raster-opacity': opacity,
+      },
     },
-  }, 'warnings-layer')
+    'warnings-layer'
+  )
 }
 
 export function showRasterLayer(
