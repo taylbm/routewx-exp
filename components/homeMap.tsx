@@ -11,13 +11,13 @@ import { GeoJSONSource, LngLatLike, Popup } from 'mapbox-gl'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { 
+import {
   faSun,
   faSnowflake,
   faCommentDots,
 } from '@fortawesome/free-regular-svg-icons'
 
-import { 
+import {
   faTemperatureArrowDown,
   faPlugCircleXmark,
   faSmog,
@@ -47,8 +47,6 @@ import {
   faSailboat,
   faHouse,
   faTornado,
-
-
 } from '@fortawesome/free-solid-svg-icons'
 
 let mapConfig = {
@@ -187,7 +185,7 @@ let mapConfig = {
     'Volcano Warning': faVolcano,
     'Wind Advisory': faWind,
     'Winter Storm Warning': faSnowplow,
-    'Wind Chill Watch': faTemperatureArrowDown
+    'Wind Chill Watch': faTemperatureArrowDown,
   },
 }
 
@@ -202,10 +200,8 @@ const PopupTemplate = ({
 }) => (
   <div className='popup'>
     <FontAwesomeIcon
-      icon={
-        mapConfig.icons[product as keyof typeof mapConfig.icons]
-      }
-      size="lg"
+      icon={mapConfig.icons[product as keyof typeof mapConfig.icons]}
+      size='5x'
     />
     <h2 className='font bold text-xl'>{headline}</h2>
     <div>
