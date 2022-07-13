@@ -47,6 +47,8 @@ jobs:
           fail_on_empty: false
       - name: install deps
         run: yarn
+      - name: auto-lint
+        run: yarn prettier-format
       - name: build dist package
         run: yarn prod
       - name: Deploy static site build to S3

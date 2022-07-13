@@ -2,8 +2,7 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 
 import 'tailwindcss/tailwind.css'
-import './global.css';
-
+import './global.css'
 
 import Layout from 'components/layout'
 import { useRouter } from 'next/router'

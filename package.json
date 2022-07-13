@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "prettier-format": "prettier --config .prettierrc 'components/*.tsx' --write",
+    "prettier-format": "prettier --config .prettierrc 'components/*.tsx' 'pages/*.tsx' --write",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
