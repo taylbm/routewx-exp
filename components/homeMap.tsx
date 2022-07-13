@@ -15,6 +15,8 @@ import {
   faSun,
   faSnowflake,
   faCommentDots,
+  faCircleXmark,
+  faSquareCheck,
 } from '@fortawesome/free-regular-svg-icons'
 
 import {
@@ -224,6 +226,8 @@ export default function HomeMap({
   const [selectedDate, setSelectedDate] = useState(
     parseFrameDate(dateStrings[0])
   )
+  const [hidden, setHidden] = useState(true)
+
   const minDate = parseFrameDate(dateStrings[0]).toString()
   const maxDate = parseFrameDate(dateStrings[dateStrings.length - 1]).toString()
   const [map, setMap] = useState<mapboxgl.Map>()
@@ -392,6 +396,7 @@ export default function HomeMap({
           type: 'fill',
           source: 'watches-warnings',
           paint: {
+            'fill-opacity': 0.7,
             'fill-color': [
               'match',
               ['string', ['get', 'prod_type']],
@@ -723,14 +728,22 @@ export default function HomeMap({
   return (
     <div id={containerId} className={`${className} relative`}>
       {children}
-
-      <div className='absolute top-4 right-4 z-50 rounded-md bg-gray-300 px-4 py-2 text-xl opacity-70'>
-        {selectedDate.toString()}
-        <br />
-        Min Date: {minDate}
-        <br />
-        Max Date: {maxDate}
-      </div>
+      <button className={'hide-button'} onClick={() => setHidden((s) => !s)}>
+        <FontAwesomeIcon
+          size='2x'
+          icon={hidden ? faSquareCheck : faCircleXmark}
+        ></FontAwesomeIcon>
+        {`${hidden ? 'Show' : 'Hide'} Date/Time`}
+      </button>
+      {!hidden ? (
+        <div className={'show-datetime'}>
+          Current Frame Radar Date/Time{selectedDate.toString()}
+          <br />
+          Oldest Date/Time: {minDate}
+          <br />
+          Latest Date/Time: {maxDate}
+        </div>
+      ) : null}
     </div>
   )
 }
