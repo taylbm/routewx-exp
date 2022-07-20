@@ -25,7 +25,7 @@ export function addRasterLayer(
     tiles: [currentFrameUrl + '/tiles/{z}/{x}/{y}.png'],
     tileSize: 256,
     attribution:
-      'Seamless Hybrid-Scan Reflectivity (https://vlab.noaa.gov/web/wdtd/-/seamless-hybrid-scan-reflectivity-shsr-) ',
+      '<a href="https://vlab.noaa.gov/web/wdtd/-/seamless-hybrid-scan-reflectivity-shsr-">Seamless Hybrid-Scan Reflectivity</a>',
   })
 
   map.addLayer(
