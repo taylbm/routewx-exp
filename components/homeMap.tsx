@@ -42,8 +42,10 @@ export default function HomeMap({
   const [hidden, setHidden] = useState(true)
   const [animated, setAnimated] = useState(true)
 
-  const minDate = parseFrameDate(dateStrings[0]).toString()
-  const maxDate = parseFrameDate(dateStrings[dateStrings.length - 1]).toString()
+  const minDate = parseFrameDate(dateStrings[0]).toTimeString()
+  const maxDate = parseFrameDate(
+    dateStrings[dateStrings.length - 1]
+  ).toTimeString()
   const [map, setMap] = useState<mapboxgl.Map>()
   const [mapFrames, setMapFrames] = useState([] as string[])
   const [mapLoaded, setMapLoaded] = useState(false)
@@ -295,24 +297,24 @@ export default function HomeMap({
           size='2x'
           icon={animated ? faSquareCheck : faSquare}
         ></FontAwesomeIcon>
-        {`${animated ? 'Stop Animating' : 'Animate'} Radar`}
+        {`${animated ? ' Stop Animating' : ' Animate'} Radar`}
       </button>
       <button className={'hide-button'} onClick={() => setHidden((s) => !s)}>
         <FontAwesomeIcon
           size='2x'
           icon={hidden ? faSquare : faSquareCheck}
         ></FontAwesomeIcon>
-        {`${hidden ? 'Show' : 'Hide'} Date/Time`}
+        {`${hidden ? ' Show' : ' Hide'} Radar Time`}
       </button>
       {!hidden ? (
         <div className={'show-datetime'}>
-          <p>Current Frame Radar Date/Time: {selectedDate.toString()}</p>
           {animated && (
             <div>
-              <div>Oldest Date/Time: {minDate}</div>
-              <div>Latest Date/Time: {maxDate}</div>
+              <div>Oldest Time: {minDate}</div>
+              <div>Latest Time: {maxDate}</div>
             </div>
           )}
+          <p>Current Radar Time: {selectedDate.toString()}</p>
         </div>
       ) : null}
       <div id={containerId} className={`${className} relative`}>

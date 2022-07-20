@@ -5,7 +5,7 @@
 .h-screen {height: 75vh;}
 
 .show-datetime {
-    font-size: large;
+    font-size: small;
     line-height: 2em;
     background: rgba(220, 220, 220, 0.5);
     transition: 0.3s all;
@@ -20,10 +20,7 @@
     z-index: -1;
 }
 .hide-button {
-    right: 0;
-    margin-right: 2%;
-    font-size: large;
-    display: block;
+    margin-left: 10px;
     position: absolute;
     z-index: 99;
 }
